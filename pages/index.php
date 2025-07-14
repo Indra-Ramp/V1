@@ -8,6 +8,11 @@
 ?>
     <div class="container vh-100">
         <div class="row">
+            <?php
+                if(isset($_GET['error'])){
+                    echo "Error";
+                }
+            ?>
         <form action="traitement_login.php" method="post" class="col-6 m-auto">
             <label for="email">Email</label>
             <input type="email" name="email" id="email" class="form-control mb-4">

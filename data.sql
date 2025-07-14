@@ -1,5 +1,10 @@
+
+create database product;
+use product;
+
 CREATE TABLE membre(
     id_membre INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100),
     date_naissance DATE,
     genre VARCHAR(20),
     email VARCHAR(100),
@@ -18,8 +23,8 @@ CREATE TABLE objet(
     nom_objet VARCHAR(50),
     id_categorie INT,
     id_membre INT,
-    FOREIGN KEY id_membre REFERENCES membre(id_membre),
-    FOREIGN KEY id_categorie REFERENCES categorie(id_categorie)
+    FOREIGN KEY (id_membre) REFERENCES membre(id_membre),
+    FOREIGN KEY (id_categorie) REFERENCES categorie_objet(id_categorie)
 
 );
 
@@ -27,7 +32,7 @@ CREATE TABLE images_objet(
     id_image INT AUTO_INCREMENT PRIMARY KEY,
     id_objet INT,
     nom_image VARCHAR(100),
-    FOREIGN KEY id_objet REFERENCES objet(id_objet)
+    FOREIGN KEY (id_objet) REFERENCES objet(id_objet)
 );
 
 CREATE TABLE emprunt(
@@ -36,16 +41,16 @@ CREATE TABLE emprunt(
     id_membre INT,
     date_emprunt DATE,
     date_retour DATE,
-    FOREIGN KEY id_membre REFERENCES membre(id_membre),
-    FOREIGN KEY id_objet REFERENCES objet(id_objet)
+    FOREIGN KEY (id_membre) REFERENCES membre(id_membre),
+    FOREIGN KEY (id_objet) REFERENCES objet(id_objet)
 
 );
 
-INSERT INTO membre (date_naissance, genre, email, ville, mdp, img) VALUES
-('1995-04-12', 'M', 'alex@example.com', 'Antananarivo', 'alex', 'alex.jpg'),
-('2000-07-25', 'F', 'sarah@example.com', 'Toamasina', 'sarah', 'sarah.png'),
-('1988-12-05', 'M', 'jean@example.com', 'Fianarantsoa', 'jean', 'jean.jpeg'),
-('1992-10-18', 'F', 'lina@example.com', 'Mahajanga', 'lina', 'lina.jpg');
+INSERT INTO membre (nom, date_naissance, genre, email, ville, mdp, img) VALUES
+('Alex','1995-04-12', 'M', 'alex@example.com', 'Antananarivo', 'alex', 'alex.jpg'),
+('Sarah','2000-07-25', 'F', 'sarah@example.com', 'Toamasina', 'sarah', 'sarah.png'),
+('Jean','1988-12-05', 'M', 'jean@example.com', 'Fianarantsoa', 'jean', 'jean.jpeg'),
+('Lina','1992-10-18', 'F', 'lina@example.com', 'Mahajanga', 'lina', 'lina.jpg');
 
 INSERT INTO categorie_objet (nom_categorie) VALUES
 ('Esthetique'),
@@ -110,4 +115,12 @@ INSERT INTO emprunt (id_objet, id_membre, date_emprunt, date_retour) VALUES
 (18, 3, '2025-07-08', '2025-07-20'),
 (29, 2, '2025-07-09', '2025-07-19'),
 (35, 3, '2025-07-10', '2025-07-21');
+
+create or replace view v_membre_objet as select membre.*, id_categorie as o_idc, id_objet as o_ido, nom_objet from membre 
+join objet on membre.id_membre = objet.id_membre;
+
+create or replace view v_objet_categorie as select * from categorie_objet join v_membre_objet on o_idc= categorie_objet.id_categorie;
+
+create or replace view v_objet_emprunt as select o.id_objet as o_ido, o.nom_objet, o.id_categorie o_idc, o.id_membre o_idm,
+e.id_emprunt, e.date_emprunt, e.date_retour from objet o join emprunt e on o.id_objet=e.id_objet;
 

@@ -6,7 +6,11 @@
     $pwd = $_POST['password'];
     $info = getLoginInfo($email, $mdp);
     if($info == NULL) {
-        header("Location:modal.php?p=index");
+        header("Location:modal.php?p=index&error=1");
+        exit();
+    }
+    else{
+        header("Location:modal.php?p=list");
     }
 
 ?>
