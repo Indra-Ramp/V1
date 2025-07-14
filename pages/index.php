@@ -1,16 +1,13 @@
-<?php
 
-    if(isset($_SESSION['user'])) {
-        header("Location:home.php");
-        exit();
-    }
-
-?>
     <div class="container vh-100">
+    <h1 class="text-center mt-3">Connexion</h1>
         <div class="row">
             <?php
                 if(isset($_GET['error'])){
-                    echo "Error";
+                    echo '<div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error !</strong> Invalid connexion identifiant!
+        <button type="button" data-bs-dismiss="alert" class="btn-close"></button>
+    </div>';
                 }
             ?>
         <form action="traitement_login.php" method="post" class="col-6 m-auto">

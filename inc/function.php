@@ -4,8 +4,24 @@
     function getLoginInfo($email, $mdp) {
         $sql = "SELECT * FROM membre WHERE email = '%s' AND mdp = '%s'";
         $sql = sprintf($sql , $email, $mdp);
+        echo $sql;
         $result = mysqli_query(dbconnect(), $sql);
         return mysqli_fetch_assoc($result);
+    }
+
+    function alreadyExists($email) {
+        $sql = "SELECT * FROM membre WHERE email = '%s'";
+        $sql = sprintf($sql, $email);
+        $result = mysqli_query(dbconnect(), $sql);
+        $data = mysqli_fetch_assoc($result);
+        return $data != null;
+    }
+
+    function insertUser($name, $email, $genre, $birth, $password, $city, $picture) {
+        $sql = "INSERT INTO membre (nom, email, mdp, date_naissance, ville, genre, img)
+        VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+        $sql = sprintf($sql, $name, $email, $password, $birth, $city, $genre, $picture);
+        mysqli_query(dbconnect(), $sql);
     }
 
     function getCategories() {

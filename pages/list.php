@@ -1,5 +1,9 @@
 <?php
 
+    if(!isset($_SESSION['user'])) {
+        header("Location:modal.php?p=index");
+        exit;
+    }
     $list = getList(isset($_POST['filter']) ? $_POST['filter'] : null);
     $categories = getCategories();
 
